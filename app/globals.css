@@ -12,26 +12,27 @@
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
     Helvetica, Arial, sans-serif;
 
-  /* Brand — trustworthy professional blue/navy (primary actions, headers) */
-  --brand-50: 239 246 255;
-  --brand-100: 219 234 254;
-  --brand-200: 191 219 254;
-  --brand-500: 37 99 235;
-  --brand-600: 29 78 216;
-  --brand-700: 30 64 175;
-  --brand-800: 30 58 138;
-  --brand-900: 15 33 79;
+  /* Brand — SiteComply logo blue (#00AEEF). 500 is the logo blue (accents,
+     focus); 600/700 are darker for accessible white-on-blue button/link text. */
+  --brand-50: 230 248 254;
+  --brand-100: 204 240 253;
+  --brand-200: 153 224 251;
+  --brand-500: 0 174 239;
+  --brand-600: 0 122 174;
+  --brand-700: 0 99 143;
+  --brand-800: 0 78 113;
+  --brand-900: 0 58 84;
 
   /* Hi-vis — construction accent (brand stripe, highlights). Use sparingly. */
   --hivis-400: 250 204 21;
   --hivis-500: 245 178 11;
   --hivis-600: 217 148 6;
 
-  /* Safety green — "compliant / checked in" status */
-  --safe-50: 240 253 244;
-  --safe-500: 34 197 94;
-  --safe-600: 22 163 74;
-  --safe-700: 21 128 61;
+  /* Safety green — SiteComply logo green (#39B54A); "compliant / checked in". */
+  --safe-50: 236 248 238;
+  --safe-500: 57 181 74;
+  --safe-600: 46 154 63;
+  --safe-700: 37 130 47;
 
   /* Danger red — non-compliant / validation errors */
   --danger-50: 254 242 242;

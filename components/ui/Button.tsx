@@ -16,8 +16,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-xl font-semibold ' +
-  'transition-colors disabled:cursor-not-allowed disabled:opacity-50 touch-target';
+  'inline-flex items-center justify-center gap-2 rounded-2xl font-semibold ' +
+  'transition-all duration-200 ease-out disabled:cursor-not-allowed ' +
+  'disabled:opacity-50 disabled:shadow-none touch-target';
 
 const sizes: Record<Size, string> = {
   md: 'px-4 py-2.5 text-sm',
@@ -25,11 +26,17 @@ const sizes: Record<Size, string> = {
 };
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800',
+  // Primary — solid logo green (#39B54A) with a soft shadow that lifts on hover.
+  primary:
+    'bg-safe-500 text-white shadow-sm shadow-safe-600/20 hover:bg-safe-600 ' +
+    'hover:shadow-md hover:shadow-safe-600/25 active:bg-safe-700 active:shadow-sm',
+  // Secondary — white fill, logo-blue (#00AEEF) outline; subtle lift, deeper on hover.
   secondary:
-    'bg-surface text-brand-700 border border-brand-200 hover:bg-brand-50 active:bg-brand-100',
+    'bg-surface text-brand-700 border-2 border-brand-500 shadow-sm ' +
+    'hover:bg-brand-50 hover:border-brand-600 hover:shadow-md active:bg-brand-100 active:shadow-sm',
   ghost: 'bg-transparent text-ink-muted hover:bg-surface-sunken',
-  danger: 'bg-danger-600 text-white hover:bg-danger-700',
+  danger:
+    'bg-danger-600 text-white shadow-sm hover:bg-danger-700 hover:shadow-md',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
