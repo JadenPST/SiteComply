@@ -35,35 +35,10 @@ export default function HomePage() {
         </Link>
         <Link href="/admin" className="block">
           <Button size="lg" variant="secondary" fullWidth>
-            Admin sign-in (Microsoft)
+            Admin sign-in
           </Button>
         </Link>
       </div>
-
-      <ul className="mt-8 grid gap-3">
-        {[
-          {
-            title: 'Built for site',
-            body: 'Large buttons, high contrast and minimal typing — usable outdoors, with gloves, on poor signal.',
-          },
-          {
-            title: 'UK compliance ready',
-            body: 'CSCS, RAMS, CDM 2015 and HSE guidance, with a UK GDPR consent step built in.',
-          },
-          {
-            title: 'Real-time visibility',
-            body: 'Admins see who is on site right now and can report on every check-in.',
-          },
-        ].map((feature) => (
-          <li
-            key={feature.title}
-            className="rounded-xl border border-line bg-surface p-4 shadow-card"
-          >
-            <h2 className="text-sm font-semibold text-ink">{feature.title}</h2>
-            <p className="mt-1 text-sm text-ink-subtle">{feature.body}</p>
-          </li>
-        ))}
-      </ul>
     </AppShell>
   );
 }
