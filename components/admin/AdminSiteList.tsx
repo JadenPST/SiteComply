@@ -125,7 +125,7 @@ function StatusBadge({ status }: { status: 'ACTIVE' | 'ARCHIVED' }) {
         'shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold',
         status === 'ACTIVE'
           ? 'bg-safe-50 text-safe-700'
-          : 'bg-surface-sunken text-ink-subtle',
+          : 'border border-line bg-surface-sunken text-ink-muted',
       )}
     >
       {status === 'ACTIVE' ? 'Active' : 'Archived'}
