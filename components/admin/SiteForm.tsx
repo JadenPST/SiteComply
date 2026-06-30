@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { TextField } from '@/components/ui/TextField';
 import { Textarea } from '@/components/ui/Textarea';
 import { useToast } from '@/components/ui/Toast';
@@ -57,6 +58,8 @@ export function SiteForm({
   });
   const [errors, setErrors] = useState<FieldErrors>({});
   const [busy, setBusy] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   function set<K extends keyof SiteFormValues>(key: K, value: string) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -91,6 +94,30 @@ export function SiteForm({
       toast.error('Network problem. Please try again.');
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function remove() {
+    if (!siteId) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/sites/${siteId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        // Records exist (409) or another failure — keep the site and explain.
+        toast.error(data.error ?? 'Could not delete this site. Please try again.');
+        setConfirmingDelete(false);
+        return;
+      }
+      toast.success('Site deleted.');
+      router.push('/admin/sites');
+      router.refresh();
+    } catch {
+      toast.error('Network problem. Please try again.');
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -178,8 +205,8 @@ export function SiteForm({
         />
       </Section>
 
-      <div className="flex gap-3">
-        <Button type="submit" size="lg" disabled={busy}>
+      <div className="flex flex-wrap gap-3">
+        <Button type="submit" size="lg" disabled={busy || deleting}>
           {busy
             ? 'Saving…'
             : mode === 'create'
@@ -191,11 +218,35 @@ export function SiteForm({
           variant="secondary"
           size="lg"
           onClick={() => router.push('/admin/sites')}
-          disabled={busy}
+          disabled={busy || deleting}
         >
           Cancel
         </Button>
+        {mode === 'edit' && siteId && (
+          <Button
+            type="button"
+            variant="danger"
+            size="lg"
+            className="sm:ml-auto"
+            onClick={() => setConfirmingDelete(true)}
+            disabled={busy || deleting}
+          >
+            Delete site
+          </Button>
+        )}
       </div>
+
+      <ConfirmDialog
+        open={confirmingDelete}
+        title="Delete site?"
+        message="Are you sure you want to permanently delete this site?"
+        confirmLabel={deleting ? 'Deleting…' : 'Delete site'}
+        cancelLabel="Cancel"
+        confirmVariant="danger"
+        busy={deleting}
+        onConfirm={remove}
+        onCancel={() => setConfirmingDelete(false)}
+      />
     </form>
   );
 }

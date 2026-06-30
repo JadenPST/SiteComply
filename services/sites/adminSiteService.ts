@@ -130,3 +130,26 @@ export function updateSite(id: string, value: ValidatedSite) {
 export function setSiteStatus(id: string, status: SiteStatus) {
   return prisma.jobSite.update({ where: { id }, data: { status } });
 }
+
+/**
+ * Number of workers currently checked in to a site (i.e. on site now — not yet
+ * checked out). Used to block deletion while anyone is still on site.
+ */
+export function countCheckedInWorkers(id: string) {
+  return prisma.submission.count({
+    where: { jobSiteId: id, checkedOutAt: null },
+  });
+}
+
+/**
+ * Permanently delete a site and all of its history. Callers MUST first ensure
+ * no workers are currently checked in (see {@link countCheckedInWorkers}).
+ * Historical submissions have no cascade on the site relation, so they are
+ * removed in the same transaction; the seeded checklist and items cascade.
+ */
+export function deleteSite(id: string) {
+  return prisma.$transaction([
+    prisma.submission.deleteMany({ where: { jobSiteId: id } }),
+    prisma.jobSite.delete({ where: { id } }),
+  ]);
+}
