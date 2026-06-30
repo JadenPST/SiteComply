@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { azureLogoutUrl, isAzureAdConfigured } from '@/services/auth/adminAuth';
 import { clearAdminSessionCookie } from '@/lib/session';
 import { appConfig } from '@/lib/config';
@@ -11,10 +11,10 @@ export const dynamic = 'force-dynamic';
  * Clears the admin session. With Azure AD configured, also ends the session at
  * Microsoft so the next sign-in re-authenticates.
  */
-export async function GET(req: NextRequest) {
+export async function GET() {
   clearAdminSessionCookie();
 
-  const loginUrl = new URL('/admin/login', req.url).toString();
+  const loginUrl = new URL('/admin/login', appConfig.baseUrl).toString();
   if (isAzureAdConfigured()) {
     return NextResponse.redirect(
       azureLogoutUrl(`${appConfig.baseUrl}/admin/login`),

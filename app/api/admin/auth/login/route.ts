@@ -1,8 +1,9 @@
 import { randomBytes } from 'crypto';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getAuthCodeUrl, isAzureAdConfigured } from '@/services/auth/adminAuth';
 import { upsertAdminFromAzure } from '@/services/admins/adminService';
 import { createAdminSessionToken, setAdminSessionCookie } from '@/lib/session';
+import { appConfig } from '@/lib/config';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -15,7 +16,7 @@ const STATE_COOKIE = 'sc_admin_oauth_state';
  * CSRF state token. Without it (local dev), signs in as a development admin so
  * the dashboard is reachable — never available in production.
  */
-export async function GET(req: NextRequest) {
+export async function GET() {
   if (isAzureAdConfigured()) {
     const state = randomBytes(16).toString('hex');
     const url = await getAuthCodeUrl(state);
@@ -32,7 +33,9 @@ export async function GET(req: NextRequest) {
 
   // --- Development fallback (no Azure AD configured) ---
   if (process.env.NODE_ENV === 'production') {
-    return NextResponse.redirect(new URL('/admin/login?error=config', req.url));
+    return NextResponse.redirect(
+      new URL('/admin/login?error=config', appConfig.baseUrl),
+    );
   }
 
   const admin = await upsertAdminFromAzure({
@@ -48,5 +51,5 @@ export async function GET(req: NextRequest) {
       role: admin.role,
     }),
   );
-  return NextResponse.redirect(new URL('/admin', req.url));
+  return NextResponse.redirect(new URL('/admin', appConfig.baseUrl));
 }

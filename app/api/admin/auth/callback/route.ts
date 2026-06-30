@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { acquireAdminIdentity } from '@/services/auth/adminAuth';
 import { upsertAdminFromAzure } from '@/services/admins/adminService';
 import { createAdminSessionToken, setAdminSessionCookie } from '@/lib/session';
+import { appConfig } from '@/lib/config';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -21,7 +22,9 @@ export async function GET(req: NextRequest) {
   const expectedState = req.cookies.get(STATE_COOKIE)?.value;
 
   const fail = (reason: string) =>
-    NextResponse.redirect(new URL(`/admin/login?error=${reason}`, req.url));
+    NextResponse.redirect(
+      new URL(`/admin/login?error=${reason}`, appConfig.baseUrl),
+    );
 
   if (params.get('error')) return fail('sso');
   if (!code || !state || !expectedState || state !== expectedState) {
@@ -43,7 +46,7 @@ export async function GET(req: NextRequest) {
     return fail('exchange');
   }
 
-  const res = NextResponse.redirect(new URL('/admin', req.url));
+  const res = NextResponse.redirect(new URL('/admin', appConfig.baseUrl));
   res.cookies.delete(STATE_COOKIE);
   return res;
 }
