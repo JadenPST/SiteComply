@@ -66,6 +66,7 @@ enum PlatformRole {
   ENGINEER
   HS_CONSULTANT //         Health & Safety Consultant
   PRINCIPAL_CONTRACTOR
+  SITE_MANAGER
 }
 
 /// Lifecycle status for a Platform User's access.

@@ -13,7 +13,8 @@ export type PlatformRoleValue =
   | 'AUDITOR'
   | 'ENGINEER'
   | 'HS_CONSULTANT'
-  | 'PRINCIPAL_CONTRACTOR';
+  | 'PRINCIPAL_CONTRACTOR'
+  | 'SITE_MANAGER';
 
 export type PlatformStatusValue = 'PENDING' | 'ACTIVE' | 'DISABLED';
 
@@ -26,6 +27,7 @@ export const PLATFORM_ROLES: { value: PlatformRoleValue; label: string }[] = [
   { value: 'ENGINEER', label: 'Engineer' },
   { value: 'HS_CONSULTANT', label: 'H&S Consultant' },
   { value: 'PRINCIPAL_CONTRACTOR', label: 'Principal Contractor' },
+  { value: 'SITE_MANAGER', label: 'Site Manager' },
 ];
 
 /** Selectable statuses, in lifecycle order, with human labels. */
