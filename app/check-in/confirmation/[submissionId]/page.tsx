@@ -43,13 +43,23 @@ export default async function ConfirmationPage({
     <AppShell>
       <section className="flex flex-col items-center gap-3 py-6 text-center">
         <span
-          className="flex h-16 w-16 items-center justify-center rounded-full bg-safe-600 text-3xl text-white"
+          className="flex h-16 w-16 animate-pop-in items-center justify-center rounded-full bg-safe-600 text-white"
           aria-hidden="true"
         >
-          ✓
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={3}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-8 w-8"
+          >
+            <path d="M5 13l4 4L19 7" />
+          </svg>
         </span>
         <h1 className="text-2xl font-bold text-ink">
-          You’re compliant and checked in
+          {checkedOut ? 'Checked out successfully' : 'Checked in successfully'}
         </h1>
         <p className="text-ink-muted">
           at{' '}
@@ -59,25 +69,31 @@ export default async function ConfirmationPage({
         </p>
       </section>
 
-      <dl className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface shadow-card">
-        <Row label="Name" value={submission.worker.fullName} />
-        <Row label="Company" value={submission.worker.company} />
-        <Row
-          label="Site reference"
-          value={`${submission.jobSite.jobReference}`}
-        />
-        <Row
-          label="Checked in"
-          value={formatDateTimeUK(submission.checkedInAt)}
-        />
-        {checkedOut && submission.checkedOutAt && (
+      <section className="space-y-2">
+        <h2 className="px-1 text-xs font-semibold uppercase tracking-wide text-ink-subtle">
+          Check-in summary
+        </h2>
+        <dl className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface shadow-card">
+          <Row label="Site" value={submission.jobSite.name} />
+          <Row label="Name" value={submission.worker.fullName} />
+          <Row label="Company" value={submission.worker.company} />
           <Row
-            label="Checked out"
-            value={formatDateTimeUK(submission.checkedOutAt)}
+            label="Site reference"
+            value={`${submission.jobSite.jobReference}`}
           />
-        )}
-        <Row label="Check-in reference" value={reference} mono />
-      </dl>
+          <Row
+            label="Checked in"
+            value={formatDateTimeUK(submission.checkedInAt)}
+          />
+          {checkedOut && submission.checkedOutAt && (
+            <Row
+              label="Checked out"
+              value={formatDateTimeUK(submission.checkedOutAt)}
+            />
+          )}
+          <Row label="Check-in reference" value={reference} mono />
+        </dl>
+      </section>
 
       <div className="mt-6 space-y-3">
         {checkedOut ? (
@@ -87,16 +103,20 @@ export default async function ConfirmationPage({
             </p>
             <Link href="/" className="block">
               <Button size="lg" fullWidth>
-                Done
+                Finish
               </Button>
             </Link>
           </>
         ) : (
           <>
-            <p className="text-center text-sm text-ink-subtle">
-              Keep this screen as proof of your induction. Check out when you
-              leave site.
-            </p>
+            <div className="rounded-xl border border-safe-500/40 bg-safe-50 px-4 py-3 text-center text-sm text-safe-700">
+              <p className="font-semibold">
+                Remember to check out before you leave site.
+              </p>
+              <p className="mt-0.5 text-safe-700/80">
+                Keep this screen as proof of your induction.
+              </p>
+            </div>
             <CheckOutButton submissionId={submission.id} />
           </>
         )}
