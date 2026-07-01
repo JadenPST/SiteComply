@@ -4,6 +4,8 @@ import {
   validateSite,
   updateSite,
   getSiteById,
+  countCheckedInWorkers,
+  deleteSite,
 } from '@/services/sites/adminSiteService';
 
 export const runtime = 'nodejs';
@@ -53,4 +55,45 @@ export async function PUT(
 
   await updateSite(params.id, result.value);
   return NextResponse.json({ ok: true, id: params.id });
+}
+
+/**
+ * DELETE /api/admin/sites/[id]
+ * Permanently deletes a job site and all of its history. Admin only. Refused
+ * with 409 while any worker is still checked in to the site.
+ */
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const admin = getAdminSession();
+  if (!admin) {
+    return NextResponse.json(
+      { ok: false, error: 'Not signed in.' },
+      { status: 401 },
+    );
+  }
+
+  const existing = await getSiteById(params.id);
+  if (!existing) {
+    return NextResponse.json(
+      { ok: false, error: 'Site not found.' },
+      { status: 404 },
+    );
+  }
+
+  const checkedIn = await countCheckedInWorkers(params.id);
+  if (checkedIn > 0) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error:
+          'Workers are currently checked in to this site. Please ensure all workers have checked out before deleting the site',
+      },
+      { status: 409 },
+    );
+  }
+
+  await deleteSite(params.id);
+  return NextResponse.json({ ok: true });
 }
