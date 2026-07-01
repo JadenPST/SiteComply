@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { cn } from '@/lib/cn';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'brand';
 type Size = 'md' | 'lg';
 
 /**
@@ -37,6 +37,11 @@ const variants: Record<Variant, string> = {
   ghost: 'bg-transparent text-ink-muted hover:bg-surface-sunken',
   danger:
     'bg-danger-600 text-white shadow-sm hover:bg-danger-700 hover:shadow-md',
+  // Brand — solid logo light-blue (#00AEEF). Distinct from the green primary and
+  // the outlined secondary; used for the Platform Login journey.
+  brand:
+    'bg-brand-500 text-white shadow-sm shadow-brand-600/20 hover:bg-brand-600 ' +
+    'hover:shadow-md hover:shadow-brand-600/25 active:bg-brand-700 active:shadow-sm',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

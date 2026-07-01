@@ -6,9 +6,9 @@ import { LogoMark } from '@/components/brand/Logo';
 /**
  * SiteComply landing / entry screen.
  *
- * The two journeys diverge here: workers head into the SMS-verified induction
- * flow; admins sign in with Microsoft. Both routes are placeholders in Stage 1
- * and are implemented in later stages.
+ * The journeys diverge here: workers head into the SMS-verified induction flow,
+ * platform users sign in to their SiteComply account (email or mobile), and
+ * admins sign in with Microsoft. Routes are built out across later stages.
  */
 export default function HomePage() {
   return (
@@ -31,6 +31,11 @@ export default function HomePage() {
         <Link href="/check-in" className="block">
           <Button size="lg" fullWidth>
             I&apos;m a worker — start check-in
+          </Button>
+        </Link>
+        <Link href="/platform" className="block">
+          <Button size="lg" variant="brand" fullWidth>
+            Platform Login
           </Button>
         </Link>
         <Link href="/admin" className="block">
