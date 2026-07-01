@@ -237,13 +237,19 @@ export function canExport(role: PlatformRoleValue): boolean {
 // ---------------------------------------------------------------------------
 
 /**
- * Roles whose permissions are ENFORCED in the current phase. Every other role is
- * left unchanged (treated as allowed) until its phase lands.
+ * Roles whose permissions are ENFORCED. All eight roles are now enforced by the
+ * approved matrix (Phase 2 complete). The list is retained so a role could be
+ * temporarily excluded from enforcement if ever needed.
  */
 export const RBAC_ENFORCED_ROLES: PlatformRoleValue[] = [
   'DIRECTOR',
   'PROJECT_MANAGER',
   'CLIENT',
+  'SITE_MANAGER',
+  'AUDITOR',
+  'ENGINEER',
+  'HS_CONSULTANT',
+  'PRINCIPAL_CONTRACTOR',
 ];
 
 export function isRbacEnforced(role: PlatformRoleValue): boolean {
